@@ -1,0 +1,97 @@
+
+{% extends "base.html" %}
+
+{% block title %}My Orders - FoodHub{% endblock %}
+
+{% block content %}
+
+<section class="my-orders-page">
+
+    <div class="orders-heading">
+        <span class="orders-tag">YOUR FOOD JOURNEY</span>
+        <h1>My <span>Orders.</span></h1>
+        <p>Track your orders and revisit your delicious choices.</p>
+    </div>
+
+    {% if orders %}
+
+        <div class="orders-list">
+
+            {% for order in orders %}
+
+                <div class="order-card">
+
+                    <div class="order-card-top">
+                        <div>
+                            <span class="order-label">ORDER ID</span>
+                            <h2>#{{ order.id }}</h2>
+                        </div>
+
+                        <span class="order-status status-{{ order.order_status|lower|replace(' ', '-') }}">
+                            {{ order.order_status|replace('_', ' ')|title }}
+                        </span>
+                    </div>
+
+                    <div class="order-divider"></div>
+
+                    <div class="order-details-grid">
+
+                        <div class="order-detail-item">
+                            <span>Order Date</span>
+                            <strong>{{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}</strong>
+                        </div>
+
+                        <div class="order-detail-item">
+                            <span>Total Amount</span>
+                            <strong class="order-amount">₹{{ "%.2f"|format(order.total_amount) }}</strong>
+                        </div>
+
+                        <div class="order-detail-item">
+                            <span>Payment Method</span>
+                            <strong>{{ order.payment_method }}</strong>
+                        </div>
+
+                        <div class="order-detail-item">
+                            <span>Payment Status</span>
+                            <strong>{{ order.payment_status|title }}</strong>
+                        </div>
+
+                        <div class="order-detail-item">
+                            <span>Items</span>
+                            <strong>{{ order.items|length }} products</strong>
+                        </div>
+
+                    </div>
+
+                    <div class="order-card-bottom">
+                        <span>Thank you for choosing FoodHub ❤️</span>
+
+                        <a href="{{ url_for('orders.order_detail', order_id=order.id) }}"
+                           class="view-order-btn">
+                            View Details →
+                        </a>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-orders">
+            <div class="empty-orders-icon">🛍️</div>
+            <h2>No Orders Yet!</h2>
+            <p>You haven't placed any orders. Explore our menu and find something delicious.</p>
+
+            <a href="{{ url_for('products.products_list') }}">
+                Explore Menu →
+            </a>
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

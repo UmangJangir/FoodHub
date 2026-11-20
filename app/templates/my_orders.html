@@ -1,0 +1,48 @@
+﻿{% extends "base.html" %}
+
+{% block title %}My Orders - FoodHub{% endblock %}
+
+{% block content %}
+
+<div class="orders-container">
+
+    <h1>My Orders 📦</h1>
+
+    {% if orders %}
+
+        {% for order in orders %}
+
+            <div class="order-card">
+
+                <h3>Order #{{ order.id }}</h3>
+
+                <p><strong>Date:</strong> {{ order.created_at.strftime('%d-%m-%Y %I:%M %p') }}</p>
+
+                <p><strong>Total:</strong> ₹{{ "%.2f"|format(order.total_amount) }}</p>
+
+                <p><strong>Payment:</strong> {{ order.payment_method }}</p>
+
+                <p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
+
+                <p><strong>Order Status:</strong> {{ order.order_status }}</p>
+
+                <a href="{{ url_for('orders.order_detail', order_id=order.id) }}">
+                    View Details →
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-cart">
+            <h2>No orders yet!</h2>
+            <a href="{{ url_for('products.products_list') }}">Explore Menu</a>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,153 @@
+
+{% extends "base.html" %}
+
+{% block title %}FoodHub - Delicious Food Delivered{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="hero-content">
+        <span class="hero-tag">FRESH & DELICIOUS FOOD</span>
+
+        <h1>
+            Delicious Food,<br>
+            <span>Delivered To You.</span>
+        </h1>
+
+        <p>
+            Enjoy your favourite meals prepared with fresh ingredients.
+            Order online and get delicious food delivered to your doorstep.
+        </p>
+
+        <a href="{{ url_for('products.products_list') }}" class="hero-btn">
+            Explore Menu &rarr;
+        </a>
+    </div>
+
+    <div class="hero-image">
+        <img
+            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=900"
+            alt="Delicious Burger">
+    </div>
+</section>
+
+
+<section class="home-section">
+    <div class="section-heading">
+        <span>EXPLORE</span>
+        <h2>Our Categories</h2>
+        <p>Choose your favourite food category.</p>
+    </div>
+
+    <div class="category-grid">
+        <a href="{{ url_for('products.products_list') }}" class="category-card">
+            <div>BURGER</div>
+            <h3>Burgers</h3>
+        </a>
+
+        <a href="{{ url_for('products.products_list') }}" class="category-card">
+            <div>PIZZA</div>
+            <h3>Pizza</h3>
+        </a>
+
+        <a href="{{ url_for('products.products_list') }}" class="category-card">
+            <div>SNACKS</div>
+            <h3>Snacks</h3>
+        </a>
+
+        <a href="{{ url_for('products.products_list') }}" class="category-card">
+            <div>DRINKS</div>
+            <h3>Beverages</h3>
+        </a>
+    </div>
+</section>
+
+
+<section class="home-section popular-section">
+    <div class="section-heading">
+        <span>OUR MENU</span>
+        <h2>Popular Foods</h2>
+        <p>Discover some of our delicious food items.</p>
+    </div>
+
+    <div class="popular-grid">
+        {% for product in products %}
+        <div class="popular-card">
+
+            {% if product.image_filename %}
+            <img
+                src="{{ url_for('static', filename='uploads/' ~ product.image_filename) }}"
+                alt="{{ product.name }}">
+            {% endif %}
+
+            <div class="popular-card-content">
+                <span class="food-category">{{ product.category }}</span>
+
+                <h3>{{ product.name }}</h3>
+
+                <p>{{ product.description }}</p>
+
+                <div class="food-card-bottom">
+                    <strong>&#8377;{{ "%.2f"|format(product.price) }}</strong>
+
+                    <a href="{{ url_for('products.product_detail', product_id=product.id) }}">
+                        View &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <p>No food items available right now.</p>
+        {% endfor %}
+    </div>
+
+    <div class="view-menu">
+        <a href="{{ url_for('products.products_list') }}">
+            View Full Menu &rarr;
+        </a>
+    </div>
+</section>
+
+
+<section class="why-section">
+    <div class="section-heading">
+        <span>WHY FOODHUB?</span>
+        <h2>Why Choose Us?</h2>
+        <p>We make your food ordering experience better.</p>
+    </div>
+
+    <div class="why-grid">
+
+        <div class="why-card">
+            <div>01</div>
+            <h3>Fresh Food</h3>
+            <p>We focus on fresh and delicious food for every order.</p>
+        </div>
+
+        <div class="why-card">
+            <div>02</div>
+            <h3>Fast Delivery</h3>
+            <p>Get your favourite food delivered to your doorstep.</p>
+        </div>
+
+        <div class="why-card">
+            <div>03</div>
+            <h3>Easy Ordering</h3>
+            <p>Simple and convenient online food ordering experience.</p>
+        </div>
+
+    </div>
+</section>
+
+
+<section class="home-cta">
+    <h2>Hungry? Let's Order!</h2>
+    <p>Your favourite food is just a click away.</p>
+
+    <a href="{{ url_for('products.products_list') }}">
+        Order Now &rarr;
+    </a>
+</section>
+
+{% endblock %}

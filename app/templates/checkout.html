@@ -1,0 +1,100 @@
+﻿
+{% extends "base.html" %}
+
+{% block title %}Checkout - FoodHub{% endblock %}
+
+{% block content %}
+
+<section class="checkout-page">
+
+    <div class="checkout-heading">
+        <span class="checkout-tag">ALMOST THERE!</span>
+        <h1>Complete Your <span>Order.</span></h1>
+        <p>Just a few details and your delicious food will be on its way.</p>
+    </div>
+
+    <div class="checkout-layout">
+
+        <div class="checkout-card">
+
+            <h2>🚚 Delivery Information</h2>
+            <p class="checkout-subtitle">Where should we deliver your order?</p>
+
+            <form method="POST" action="{{ url_for('orders.checkout') }}">
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="checkout-form-group">
+                    <label for="delivery_address">Delivery Address</label>
+
+                    <textarea
+                        id="delivery_address"
+                        name="delivery_address"
+                        rows="4"
+                        placeholder="House number, street, area, city, PIN code..."
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="checkout-form-group">
+                    <label for="phone">Phone Number</label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter your 10-digit phone number"
+                        pattern="[0-9]{10,15}"
+                        minlength="10"
+                        maxlength="15"
+                        required
+                    >
+                </div>
+
+                <div class="checkout-form-group">
+                    <label for="payment_method">Payment Method</label>
+
+                    <select id="payment_method" name="payment_method" required>
+                        <option value="COD">Cash on Delivery (COD)</option>
+                    </select>
+                </div>
+
+                <div class="cod-note">
+                    💵 Pay with cash when your order arrives.
+                </div>
+
+                <button type="submit" class="place-order-btn">
+                    Place My Order →
+                </button>
+
+            </form>
+
+            <a href="{{ url_for('cart.view_cart') }}" class="checkout-back">
+                ← Back to Cart
+            </a>
+
+        </div>
+
+        <div class="checkout-side-card">
+            <div class="checkout-side-icon">🍔</div>
+            <h2>Good Food Is Just Minutes Away!</h2>
+            <p>Freshly prepared, carefully packed and delivered with love.</p>
+
+            <div class="checkout-benefit">
+                <span>✓</span> Freshly prepared food
+            </div>
+
+            <div class="checkout-benefit">
+                <span>✓</span> Secure order placement
+            </div>
+
+            <div class="checkout-benefit">
+                <span>✓</span> Pay at your doorstep
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

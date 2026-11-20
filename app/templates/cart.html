@@ -1,0 +1,131 @@
+﻿
+{% extends "base.html" %}
+
+{% block title %}My Cart - FoodHub{% endblock %}
+
+{% block content %}
+
+<section class="cart-page">
+
+    <div class="cart-heading">
+        <span class="menu-label">YOUR FOOD SELECTION</span>
+        <h1>My Shopping Cart 🛒</h1>
+        <p>Review your delicious choices before checkout.</p>
+    </div>
+
+    {% if cart and cart.items %}
+
+        {% set ns = namespace(total=0) %}
+
+        <div class="cart-layout">
+
+            <div class="cart-items">
+
+                {% for item in cart.items %}
+
+                    {% set subtotal = item.product.price * item.quantity %}
+                    {% set ns.total = ns.total + subtotal %}
+
+                    <article class="cart-item">
+
+                        <div class="cart-item-image">
+                            {% if item.product.image_filename %}
+                                <img
+                                    src="{{ url_for('static', filename='uploads/' ~ item.product.image_filename) }}"
+                                    alt="{{ item.product.name }}"
+                                >
+                            {% else %}
+                                🍽️
+                            {% endif %}
+                        </div>
+
+                        <div class="cart-item-info">
+
+                            <span class="cart-category">{{ item.product.category }}</span>
+
+                            <h3>{{ item.product.name }}</h3>
+
+                            <p>Price: ₹{{ "%.2f"|format(item.product.price) }}</p>
+
+                            <p>
+                                Subtotal:
+                                <strong>₹{{ "%.2f"|format(subtotal) }}</strong>
+                            </p>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('cart.update', item_id=item.id) }}"
+                                class="cart-update-form"
+                            >
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                                <label>Quantity:</label>
+
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value="{{ item.quantity }}"
+                                    min="1"
+                                    max="{{ item.product.stock }}"
+                                    required
+                                >
+
+                                <button type="submit" class="update-btn">Update</button>
+                            </form>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('cart.remove', item_id=item.id) }}"
+                            >
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                                <button type="submit" class="remove-btn">Remove Item</button>
+                            </form>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+            <aside class="cart-summary">
+
+                <span class="menu-label">TOTAL BILL</span>
+                <h2>Order Summary</h2>
+
+                <div class="cart-total">
+                    <span>Total Amount</span>
+                    <strong>₹{{ "%.2f"|format(ns.total) }}</strong>
+                </div>
+
+                <a href="{{ url_for('orders.checkout') }}" class="checkout-btn">
+                    Proceed to Checkout →
+                </a>
+
+                <a href="{{ url_for('products.products_list') }}" class="continue-shopping">
+                    Continue Shopping
+                </a>
+
+            </aside>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <h2>Your Cart is Empty</h2>
+            <p>Add some delicious food to get started!</p>
+
+            <a href="{{ url_for('products.products_list') }}">
+                Explore Menu →
+            </a>
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

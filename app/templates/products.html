@@ -1,0 +1,91 @@
+
+{% extends "base.html" %}
+
+{% block title %}Explore Menu - FoodHub{% endblock %}
+
+{% block content %}
+
+<section class="menu-hero">
+    <div class="menu-hero-content">
+        <span class="menu-label">GOOD FOOD, GOOD MOOD</span>
+        <h1>Explore Our <span>Menu.</span></h1>
+        <p>Discover delicious meals made to satisfy your cravings.</p>
+        <div class="menu-hero-tag">Freshness in every bite ✦</div>
+    </div>
+
+    <div class="menu-hero-decoration">🍕</div>
+</section>
+
+<section class="menu-container">
+
+    <div class="menu-heading">
+        <div>
+            <span class="menu-label">MADE WITH LOVE</span>
+            <h2>All Delicious Things</h2>
+            <p>Find your next favourite meal.</p>
+        </div>
+
+        <span class="menu-count">
+            {{ products|length }} ITEMS
+        </span>
+    </div>
+
+    <div class="product-grid">
+
+        {% for product in products %}
+
+        <article class="product-card">
+
+            <div class="product-image-wrapper">
+
+                {% if product.image_filename %}
+                <img
+                    src="{{ url_for('static', filename='uploads/' ~ product.image_filename) }}"
+                    alt="{{ product.name }}"
+                    loading="lazy"
+                >
+                {% else %}
+                <div class="product-placeholder">🍽️</div>
+                {% endif %}
+
+                <span class="product-badge">FOODHUB PICK</span>
+
+            </div>
+
+            <div class="product-info">
+
+                <span class="category">{{ product.category }}</span>
+
+                <h3>{{ product.name }}</h3>
+
+                <p>{{ product.description }}</p>
+
+                <div class="product-bottom">
+
+                    <strong>&#8377;{{ "%.2f"|format(product.price) }}</strong>
+
+                    <a href="{{ url_for('products.product_detail', product_id=product.id) }}">
+                        View Details <span>↗</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% else %}
+
+        <div class="empty-menu">
+            <div>🍽️</div>
+            <h2>No food available right now</h2>
+            <p>Please check again later.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}
