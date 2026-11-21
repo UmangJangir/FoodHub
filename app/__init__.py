@@ -9,7 +9,6 @@ def create_app():
 
     app = Flask(
         __name__,
-        instance_path="/tmp/foodhub-instance",
         instance_relative_config=True
     )
 
