@@ -1,0 +1,67 @@
+
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Orders - FoodHub{% endblock %}
+{% block page_heading %}Manage Orders{% endblock %}
+
+{% block content %}
+<div class="admin-content-section">
+    <div class="section-heading">
+        <div>
+            <h2>All Orders</h2>
+            <p>View customer orders and update their status.</p>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Order Status</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.customer.full_name }}</td>
+                    <td>{{ order.phone }}</td>
+                    <td>₹{{ "%.2f"|format(order.total_amount|float) }}</td>
+                    <td>{{ order.payment_status|title }}</td>
+                    <td>{{ order.order_status|replace("_", " ")|title }}</td>
+                    <td>
+                        <form method="POST"
+                              action="{{ url_for('admin.update_order_status', order_id=order.id) }}"
+                              class="status-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <select name="order_status">
+                                {% for status in ["placed", "confirmed", "preparing", "out_for_delivery", "delivered", "cancelled"] %}
+                                <option value="{{ status }}"
+                                    {% if order.order_status == status %}selected{% endif %}>
+                                    {{ status|replace("_", " ")|title }}
+                                </option>
+                                {% endfor %}
+                            </select>
+
+                            <button type="submit" class="edit-button">Save</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="empty-state">No orders available yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

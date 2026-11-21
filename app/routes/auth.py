@@ -57,14 +57,16 @@ def register():
     return render_template("register.html")
 
 
+
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
 
     if current_user.is_authenticated:
+        if current_user.role == "admin":
+            return redirect(url_for("admin.dashboard"))
         return redirect(url_for("main.home"))
 
     if request.method == "POST":
-
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
 
@@ -72,7 +74,11 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
+
             flash("Welcome back!", "success")
+
+            if user.role == "admin":
+                return redirect(url_for("admin.dashboard"))
 
             next_page = request.args.get("next")
 
@@ -85,12 +91,9 @@ def login():
 
     return render_template("login.html")
 
-
 @auth_bp.route("/logout")
 @login_required
 def logout():
-
     logout_user()
     flash("You have been logged out.", "success")
-
     return redirect(url_for("main.home"))

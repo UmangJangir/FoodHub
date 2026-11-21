@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FoodHub Admin{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <aside class="admin-sidebar">
+        <a href="{{ url_for('admin.dashboard') }}" class="admin-logo">
+            🍔 Food<span>Hub</span>
+            <small>ADMIN PANEL</small>
+        </a>
+
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin.dashboard') }}">📊 Dashboard</a>
+            <a href="{{ url_for('admin.products') }}">🍔 Products</a>
+            <a href="{{ url_for('admin.orders') }}">📦 Orders</a>
+            <a href="{{ url_for('admin.customers') }}">👥 Customers</a>
+            <a href="{{ url_for('main.home') }}">🌐 View Website</a>
+            <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>FoodHub Admin</p>
+            <small>Management Panel</small>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+
+        <header class="admin-topbar">
+            <div>
+                <h2>{% block page_heading %}Dashboard{% endblock %}</h2>
+                <p>Welcome, {{ current_user.full_name }}</p>
+            </div>
+            <div class="admin-profile">
+                <span>👤</span>
+                <strong>{{ current_user.full_name }}</strong>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="admin-alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+</div>
+
+</body>
+</html>

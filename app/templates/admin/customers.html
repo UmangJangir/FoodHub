@@ -1,0 +1,46 @@
+
+{% extends "admin/base.html" %}
+
+{% block title %}Customers - FoodHub{% endblock %}
+{% block page_heading %}Manage Customers{% endblock %}
+
+{% block content %}
+<div class="admin-content-section">
+    <div class="section-heading">
+        <div>
+            <h2>Registered Customers</h2>
+            <p>View all customers registered on FoodHub.</p>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Joined On</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>#{{ customer.id }}</td>
+                    <td>{{ customer.full_name }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.phone or "Not provided" }}</td>
+                    <td>{{ customer.created_at.strftime("%d %b %Y") }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="empty-state">No customers registered yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

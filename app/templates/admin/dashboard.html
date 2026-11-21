@@ -1,0 +1,123 @@
+
+{% extends "admin/base.html" %}
+
+{% block title %}Admin Dashboard - FoodHub{% endblock %}
+{% block page_heading %}Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-welcome">
+    <div>
+        <span class="welcome-tag">FOODHUB MANAGEMENT</span>
+        <h1>Welcome to Admin Panel 👋</h1>
+        <p>Manage your food business from one place.</p>
+    </div>
+    <div class="welcome-icon">🍔</div>
+</section>
+
+<section class="stats-grid">
+
+    <div class="stat-card purple">
+        <div class="stat-icon">📦</div>
+        <p>Total Orders</p>
+        <h2>{{ total_orders }}</h2>
+        <small>All customer orders</small>
+    </div>
+
+    <div class="stat-card lime">
+        <div class="stat-icon">🍕</div>
+        <p>Total Products</p>
+        <h2>{{ total_products }}</h2>
+        <small>Products in FoodHub</small>
+    </div>
+
+    <div class="stat-card red">
+        <div class="stat-icon">👥</div>
+        <p>Total Customers</p>
+        <h2>{{ total_customers }}</h2>
+        <small>Registered customers</small>
+    </div>
+
+    <div class="stat-card dark">
+        <div class="stat-icon">💰</div>
+        <p>Revenue</p>
+        <h2>₹{{ "%.2f"|format(revenue|float) }}</h2>
+        <small>Paid and completed orders</small>
+    </div>
+
+</section>
+
+<section class="dashboard-section">
+    <div class="section-heading">
+        <div>
+            <h2>Recent Orders</h2>
+            <p>Latest customer orders</p>
+        </div>
+        <a href="{{ url_for('admin.orders') }}" class="view-all">View All →</a>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.customer.full_name }}</td>
+                    <td>₹{{ "%.2f"|format(order.total_amount|float) }}</td>
+                    <td>{{ order.payment_status|title }}</td>
+                    <td>
+                        <span class="status-badge">
+                            {{ order.order_status|replace("_", " ")|title }}
+                        </span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="empty-state">No orders available yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="action-grid">
+        <a href="{{ url_for('admin.add_product') }}" class="action-card">
+            <span>➕</span>
+            <strong>Add New Product</strong>
+            <small>Add food items to your menu</small>
+        </a>
+
+        <a href="{{ url_for('admin.products') }}" class="action-card">
+            <span>🍔</span>
+            <strong>Manage Products</strong>
+            <small>Update your food menu</small>
+        </a>
+
+        <a href="{{ url_for('admin.orders') }}" class="action-card">
+            <span>📦</span>
+            <strong>Manage Orders</strong>
+            <small>Track customer orders</small>
+        </a>
+
+        <a href="{{ url_for('admin.customers') }}" class="action-card">
+            <span>👥</span>
+            <strong>View Customers</strong>
+            <small>See registered customers</small>
+        </a>
+    </div>
+</section>
+
+{% endblock %}
